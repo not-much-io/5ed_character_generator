@@ -1,0 +1,351 @@
+var _user$project$View$characterSheet = function ($char) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(_elm_lang$core$Basics_ops['++'], 'Name: ', $char.name))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Class: ',
+							_elm_lang$core$Basics$toString($char.$class)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Abilities: ',
+							_elm_lang$core$Basics$toString($char.ability_scores)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Experience points: ',
+							_elm_lang$core$Basics$toString($char.experience_points)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Level: ',
+							_elm_lang$core$Basics$toString($char.level)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Proficiency Bonus: ',
+							_elm_lang$core$Basics$toString($char.proficiency_bonus)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Ability Modifiers: ',
+							_elm_lang$core$Basics$toString($char.ability_modifiers)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Saving Throws: ',
+							_elm_lang$core$Basics$toString($char.saving_throws)))
+					])),
+				A2(
+				_elm_lang$html$Html$h4,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'Skills: ',
+							_elm_lang$core$Basics$toString($char.skills)))
+					]))
+			]));
+};
+var _user$project$View$skillProfsInput = function (_p0) {
+	var _p1 = _p0;
+	var skillCheckbox = function (skill) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$type$('checkbox'),
+							_elm_lang$html$Html_Attributes$name('skill_prof'),
+							_elm_lang$html$Html_Attributes$value(
+							_elm_lang$core$Basics$toString(skill)),
+							_elm_lang$html$Html_Events$onCheck(
+							function (bool) {
+								return A2(_user$project$Types$UpdateSkillProficiencies, skill, bool);
+							})
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					_elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(skill)),
+					A2(
+					_elm_lang$html$Html$br,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
+	};
+	var _p2 = _p1.init_char_data.$class;
+	var skill_profs = _p2.skill_profs;
+	var skill_choices = _p2.skill_choices;
+	var skillCheckboxes = A2(_elm_lang$core$List$map, skillCheckbox, skill_choices);
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		skillCheckboxes);
+};
+var _user$project$View$experiencePointsInput = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Experience Points:'),
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$type$('number'),
+						_elm_lang$html$Html_Attributes$min('0'),
+						_elm_lang$html$Html_Attributes$max('355000'),
+						_elm_lang$html$Html_Events$onInput(_user$project$Types$UpdateExperiencePoints)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[]))
+			]));
+};
+var _user$project$View$classDropdown = function (model) {
+	var options = A2(
+		_elm_lang$core$List$map,
+		function (cls) {
+			return A2(
+				_elm_lang$html$Html$option,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$value(cls)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(cls)
+					]));
+		},
+		_user$project$CharacterClasses$character_classes_names);
+	var nameToClass = function (name) {
+		var _p3 = name;
+		switch (_p3) {
+			case 'barbarian':
+				return _user$project$CharacterClasses$barbarian;
+			case 'bard':
+				return _user$project$CharacterClasses$bard;
+			case 'cleric':
+				return _user$project$CharacterClasses$cleric;
+			case 'druid':
+				return _user$project$CharacterClasses$druid;
+			case 'fighter':
+				return _user$project$CharacterClasses$fighter;
+			case 'monk':
+				return _user$project$CharacterClasses$monk;
+			case 'paladin':
+				return _user$project$CharacterClasses$paladin;
+			case 'ranger':
+				return _user$project$CharacterClasses$ranger;
+			case 'rogue':
+				return _user$project$CharacterClasses$rogue;
+			case 'sorcerer':
+				return _user$project$CharacterClasses$sorcerer;
+			case 'warlock':
+				return _user$project$CharacterClasses$warlock;
+			case 'wizard':
+				return _user$project$CharacterClasses$wizard;
+			default:
+				return _user$project$CharacterClasses$bard;
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$select,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Events$onInput(
+				function (cls_str) {
+					return _user$project$Types$UpdateClass(
+						nameToClass(cls_str));
+				})
+			]),
+		options);
+};
+var _user$project$View$nameInput = function (model) {
+	return A2(
+		_elm_lang$html$Html$textarea,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$placeholder('Name..'),
+				_elm_lang$html$Html_Attributes$rows(1),
+				_elm_lang$html$Html_Attributes$cols(20),
+				_elm_lang$html$Html_Events$onInput(_user$project$Types$UpdateName)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _user$project$View$skills = _elm_lang$core$Native_List.fromArray(
+	[_user$project$Types$Acrobatics, _user$project$Types$AnimalHandling, _user$project$Types$Arcana, _user$project$Types$Athletics, _user$project$Types$Deception, _user$project$Types$History, _user$project$Types$Insight, _user$project$Types$Intimidation, _user$project$Types$Investigation, _user$project$Types$Medicine, _user$project$Types$Nature, _user$project$Types$Perception, _user$project$Types$Performance, _user$project$Types$Persuasion, _user$project$Types$Religion, _user$project$Types$SleightOfHand, _user$project$Types$Stealth, _user$project$Types$Survival]);
+var _user$project$View$abilities = _elm_lang$core$Native_List.fromArray(
+	[_user$project$Types$Strength, _user$project$Types$Dexterity, _user$project$Types$Constitution, _user$project$Types$Intelligence, _user$project$Types$Wisdom, _user$project$Types$Charisma]);
+var _user$project$View$abilityScoreInput = function (model) {
+	var abilityRangeScroller = function (ability) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(ability)),
+					A2(
+					_elm_lang$html$Html$br,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$type$('number'),
+							_elm_lang$html$Html_Attributes$min('8'),
+							_elm_lang$html$Html_Attributes$max('16'),
+							_elm_lang$html$Html_Events$onInput(
+							function (score) {
+								return A2(
+									_user$project$Types$UpdateAbilityScores,
+									ability,
+									A2(
+										_elm_lang$core$Result$withDefault,
+										-1,
+										_elm_lang$core$String$toInt(score)));
+							})
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		A2(_elm_lang$core$List$map, abilityRangeScroller, _user$project$View$abilities));
+};
+var _user$project$View$characterCreationForm = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h1,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('5ed Character Generator')
+					])),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$View$nameInput(model),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$View$classDropdown(model),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$View$abilityScoreInput(model),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$View$experiencePointsInput(model),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_user$project$View$skillProfsInput(model)
+			]));
+};

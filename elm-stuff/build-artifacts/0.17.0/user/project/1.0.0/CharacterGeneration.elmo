@@ -1,0 +1,97 @@
+var _user$project$CharacterGeneration$calcSkills = F3(
+	function (_p0, skill_profs, prof_bonus) {
+		var _p1 = _p0;
+		var _p5 = _p1.wis;
+		var _p4 = _p1.$int;
+		var _p3 = _p1.dex;
+		var _p2 = _p1.cha;
+		var calcSkill = F2(
+			function (ability, skill) {
+				return A2(_elm_lang$core$List$member, skill, skill_profs) ? (ability + prof_bonus) : ability;
+			});
+		return _user$project$Types$SkillScores(
+			A2(calcSkill, _p3, _user$project$Types$Acrobatics))(
+			A2(calcSkill, _p5, _user$project$Types$AnimalHandling))(
+			A2(calcSkill, _p4, _user$project$Types$Arcana))(
+			A2(calcSkill, _p1.str, _user$project$Types$Athletics))(
+			A2(calcSkill, _p2, _user$project$Types$Deception))(
+			A2(calcSkill, _p4, _user$project$Types$History))(
+			A2(calcSkill, _p5, _user$project$Types$Insight))(
+			A2(calcSkill, _p2, _user$project$Types$Intimidation))(
+			A2(calcSkill, _p4, _user$project$Types$Investigation))(
+			A2(calcSkill, _p5, _user$project$Types$Medicine))(
+			A2(calcSkill, _p4, _user$project$Types$Nature))(
+			A2(calcSkill, _p5, _user$project$Types$Perception))(
+			A2(calcSkill, _p2, _user$project$Types$Performance))(
+			A2(calcSkill, _p2, _user$project$Types$Persuasion))(
+			A2(calcSkill, _p4, _user$project$Types$Religion))(
+			A2(calcSkill, _p3, _user$project$Types$SleightOfHand))(
+			A2(calcSkill, _p3, _user$project$Types$Stealth))(
+			A2(calcSkill, _p5, _user$project$Types$Survival));
+	});
+var _user$project$CharacterGeneration$calcSavingThrows = F3(
+	function (_p7, _p6, prof_bonus) {
+		var _p8 = _p7;
+		var _p9 = _p6;
+		var calcSavingThrow = F2(
+			function (ability_score, ability) {
+				return A2(_elm_lang$core$List$member, ability, _p9.saving_throws) ? (ability_score + prof_bonus) : ability_score;
+			});
+		return A6(
+			_user$project$Types$SavingThrows,
+			A2(calcSavingThrow, _p8.str, _user$project$Types$Strength),
+			A2(calcSavingThrow, _p8.dex, _user$project$Types$Dexterity),
+			A2(calcSavingThrow, _p8.con, _user$project$Types$Constitution),
+			A2(calcSavingThrow, _p8.$int, _user$project$Types$Intelligence),
+			A2(calcSavingThrow, _p8.wis, _user$project$Types$Wisdom),
+			A2(calcSavingThrow, _p8.cha, _user$project$Types$Charisma));
+	});
+var _user$project$CharacterGeneration$calcAbilityModifiers = function (_p10) {
+	var _p11 = _p10;
+	var calcMod = function (score) {
+		return ((score - 10) / 2) | 0;
+	};
+	return A6(
+		_user$project$Types$AbilityModifiers,
+		calcMod(_p11.str),
+		calcMod(_p11.dex),
+		calcMod(_p11.con),
+		calcMod(_p11.$int),
+		calcMod(_p11.wis),
+		calcMod(_p11.cha));
+};
+var _user$project$CharacterGeneration$calcProfBonus = function (level) {
+	var prof_gaining_levels = _elm_lang$core$Native_List.fromArray(
+		[5, 9, 13, 17]);
+	var prof_gaining_info = A2(
+		_elm_lang$core$List$map,
+		function (pgl) {
+			return (_elm_lang$core$Native_Utils.cmp(level, pgl) > -1) ? 1 : 0;
+		},
+		prof_gaining_levels);
+	var initial_proficiency = 2;
+	return initial_proficiency + _elm_lang$core$List$sum(prof_gaining_info);
+};
+var _user$project$CharacterGeneration$calcLevel = function (xp) {
+	var leveling_points = _elm_lang$core$Native_List.fromArray(
+		[0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000]);
+	var leveling_info = A2(
+		_elm_lang$core$List$map,
+		function (lp) {
+			return (_elm_lang$core$Native_Utils.cmp(xp, lp) > -1) ? 1 : 0;
+		},
+		leveling_points);
+	return _elm_lang$core$List$sum(leveling_info);
+};
+var _user$project$CharacterGeneration$buildCharacter = function (_p12) {
+	var _p13 = _p12;
+	var _p16 = _p13.experience_points;
+	var _p15 = _p13.$class;
+	var _p14 = _p13.ability_scores;
+	var ability_modifiers = _user$project$CharacterGeneration$calcAbilityModifiers(_p14);
+	var level = _user$project$CharacterGeneration$calcLevel(_p16);
+	var prof_bonus = _user$project$CharacterGeneration$calcProfBonus(level);
+	var saving_throws = A3(_user$project$CharacterGeneration$calcSavingThrows, ability_modifiers, _p15, prof_bonus);
+	var skills = A3(_user$project$CharacterGeneration$calcSkills, ability_modifiers, _p13.skill_profs, prof_bonus);
+	return A9(_user$project$Types$CharacterData, _p13.name, _p15, _p14, _p16, level, prof_bonus, ability_modifiers, saving_throws, skills);
+};

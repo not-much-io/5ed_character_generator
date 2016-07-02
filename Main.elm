@@ -1,264 +1,135 @@
+import Html exposing (..)
+import Html.App as Html
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+import Types exposing ( InitialCharacterData
+                      , CharacterClass
+                      , AbilityScores
+                      , Skill )
+import CharacterClasses exposing (..)
+import CharacterGeneration exposing (..)
+import View exposing (..)
+import String
+
+main = 
+    Html.program 
+      { init = init
+      , view = view
+      , update = update
+      , subscriptions = subscriptions
+      }
 
 
-type Ability = 
-    Strength
-    | Dexterity
-    | Constitution
-    | Intelligence
-    | Wisdom
-    | Charisma
-
-
-type Skill =
-    Acrobatics
-    | AnimalHandling
-    | Arcana
-    | Athletics
-    | Deception
-    | History
-    | Insight
-    | Intimidation
-    | Investigation
-    | Medicine
-    | Nature
-    | Perception
-    | Performance
-    | Persuasion
-    | Religion
-    | SleightOfHand
-    | Stealth
-    | Survival
-
-
-type alias AbilityScores =
-    { str : Int
-    , dex : Int
-    , con : Int
-    , int : Int
-    , wis : Int
-    , cha : Int
-    }
-
-
-type alias AbilityModifiers =
-    { str : Int
-    , dex : Int
-    , con : Int
-    , int : Int
-    , wis : Int
-    , cha : Int
-    }
-
-
-type alias SavingThrows =
-    { str : Int
-    , dex : Int
-    , con : Int
-    , int : Int
-    , wis : Int
-    , cha : Int
-    }
-
-
-type alias SkillScores =
-    { acrobatics : Int
-    , animal_handling :Int
-    , arcana : Int
-    , athletics : Int
-    , deception : Int
-    , history : Int
-    , insight : Int
-    , intimidation : Int
-    , investigation : Int
-    , medicine : Int
-    , nature : Int
-    , perception : Int
-    , performance : Int
-    , persuasion : Int
-    , religion : Int
-    , sleight_of_hand : Int
-    , stealth : Int
-    , survivial : Int
-    }
-
-
-type alias CharacterClass =
-    { hit_die : Int
-    , saving_throws : List Ability
-    }
-
-
-type alias InitialCharacterData =
-    { name : String
-    , class : CharacterClass
-    , ability_scores : AbilityScores
-    , experience_points : Int
-    , skill_profs : List Skill
-    }
-
-
-type alias CharacterData =
-    { name : String
-    , class : CharacterClass
-    , ability_scores : AbilityScores
-    , experience_points : Int     
-    , level : Int
-    , proficiency_bonus : Int
-    , ability_modifiers : AbilityModifiers
-    , saving_throws : SavingThrows
-    , skills : SkillScores
-    }
-
-
-barbarian = 
-    CharacterClass 12 [ Strength, Constitution ]
-bard = 
-    CharacterClass 8 [ Dexterity, Charisma ]
-cleric =
-    CharacterClass 8 [ Wisdom, Charisma ]
-druid =
-    CharacterClass 8 [ Intelligence, Wisdom ]
-fighter =
-    CharacterClass 10 [ Strength, Constitution ]
-monk =
-    CharacterClass 8 [ Strength, Dexterity ]
-paladin =
-    CharacterClass 10 [ Wisdom, Charisma ]
-ranger =
-    CharacterClass 10 [ Strength, Dexterity ]
-rogue =
-    CharacterClass 8 [ Dexterity, Intelligence ]
-sorcerer =
-    CharacterClass 6 [ Constitution, Charisma ]
-warlock =
-    CharacterClass 8 [ Wisdom, Charisma ]
-wizard =
-    CharacterClass 6 [ Intelligence, Wisdom ]
-
-initial_character_data = 
+init : (Types.Model, Cmd Types.Msg)
+init =
     let
-        name = "Midnight"
-        class = bard
-        ability_scores =
-            AbilityScores 10 10 10 10 10 10
-        experience_points = 0
+      init_char_data =
+        Types.InitialCharacterData
+          "charname"
+          bard
+          (AbilityScores 10 16 12 11 12 14)
+          0
+          [ Types.Acrobatics, Types.Arcana ]
+
+      char_data =
+        buildCharacter init_char_data
+
+      init_model =
+        Types.Model
+          init_char_data
+          char_data
     in
-        InitialCharacterData name class ability_scores experience_points
+      (init_model, Cmd.none)
 
 
-calcLevel : Int -> Int
-calcLevel xp =
+update : Types.Msg -> Types.Model -> (Types.Model, Cmd Types.Msg)
+update msg model =
     let
-        leveling_points = 
-            [ 0, 300, 900, 2700, 6500
-            , 14000, 23000, 34000, 48000, 64000
-            , 85000, 100000, 120000, 140000, 165000
-            , 195000, 225000, 265000, 305000, 355000
-            ]
-        leveling_info = 
-            List.map (\lp -> if xp >= lp then 1 else 0) leveling_points
+      init_char_data = model.init_char_data
+      updateCharData init_char_data =
+        { model | 
+          init_char_data = init_char_data,
+          char_data = buildCharacter init_char_data
+        }
     in
-        List.sum leveling_info
+      case msg of
+          Types.UpdateName name ->
+            let
+              new_init_char_data =
+                { init_char_data | name = name }
+            in
+              (updateCharData new_init_char_data, Cmd.none)
+          
+          Types.UpdateClass class ->
+            let
+              new_init_char_data =
+                { init_char_data | class = class }
+            in
+              (updateCharData new_init_char_data, Cmd.none)
+          
+          Types.UpdateAbilityScores ability_score score ->
+            let
+              current_ability_score = init_char_data.ability_scores
+              new_init_char_data =
+                case ability_score of
+                  Types.Strength ->
+                    { init_char_data | ability_scores = { current_ability_score | str = score } }
+                  Types.Dexterity ->
+                    { init_char_data | ability_scores = { current_ability_score | dex = score } }
+                  Types.Constitution ->
+                    { init_char_data | ability_scores = { current_ability_score | con = score } }
+                  Types.Intelligence ->
+                    { init_char_data | ability_scores = { current_ability_score | int = score } }
+                  Types.Wisdom ->
+                    { init_char_data | ability_scores = { current_ability_score | wis = score } }
+                  Types.Charisma ->
+                    { init_char_data | ability_scores = { current_ability_score | cha = score } }
+            in
+              (updateCharData new_init_char_data, Cmd.none)
+          
+          Types.UpdateExperiencePoints xp ->
+            let
+              xp_int = Result.withDefault -1 (String.toInt xp)
+              new_init_char_data =
+                { init_char_data | experience_points = xp_int }
+            in
+              (updateCharData new_init_char_data, Cmd.none)
+          
+          Types.UpdateSkillProficiencies skill bool ->
+            let
+              current_skills = init_char_data.skill_profs
+            in
+              if bool then
+                -- add
+                let
+                  new_skills = skill :: current_skills
+                  new_init_char_data =
+                    { init_char_data | skill_profs = new_skills }
+                in
+                  (updateCharData new_init_char_data, Cmd.none)
+              else
+                -- remove
+                let
+                  new_skills =
+                    List.filter
+                      (\s -> not (s == skill))
+                      current_skills
+                  new_init_char_data =
+                    { init_char_data | skill_profs = new_skills }
+                in
+                  (updateCharData new_init_char_data, Cmd.none)
+
+-- SUBSCRIPTIONS
+subscriptions : Types.Model -> Sub Types.Msg
+subscriptions model =
+  Sub.none
 
 
-calcProfBonus : Int -> Int
-calcProfBonus level =
-    let
-        initial_proficiency = 2
-        prof_gaining_levels = [5, 9, 13, 17]
-        prof_gaining_info =
-            List.map (\pgl -> if level >= pgl then 1 else 0) prof_gaining_levels
-    in
-        initial_proficiency + (List.sum prof_gaining_info)
-
-
-calcAbilityModifiers : AbilityScores -> AbilityModifiers
-calcAbilityModifiers {str, dex, con, int, wis, cha} =
-    let
-        calcMod : Int -> Int
-        calcMod score = 
-            (score - 10) // 2
-    in
-        AbilityModifiers
-            (calcMod str)
-            (calcMod dex)
-            (calcMod con)
-            (calcMod int)
-            (calcMod wis)
-            (calcMod cha)
-
-
-calcSavingThrows : AbilityModifiers -> CharacterClass -> Int -> SavingThrows
-calcSavingThrows {str, dex, con, int, wis, cha} {saving_throws} prof_bonus =
-    let
-        calcSavingThrow : Int -> Ability -> Int
-        calcSavingThrow ability_score ability =
-            if (List.member ability saving_throws) then
-                ability_score + prof_bonus
-            else
-                ability_score
-    in
-        SavingThrows
-            (calcSavingThrow str Strength)
-            (calcSavingThrow dex Dexterity)
-            (calcSavingThrow con Constitution)
-            (calcSavingThrow int Intelligence)
-            (calcSavingThrow wis Wisdom)
-            (calcSavingThrow cha Charisma)
-
-
-calcSkills : AbilityModifiers -> List Skill -> Int -> SkillScores
-calcSkills {str, dex, con, int, wis, cha} skill_profs prof_bonus =
-    let
-        calcSkill : Int -> Skill -> Int
-        calcSkill ability skill =
-            if (List.member skill skill_profs) then
-                ability + prof_bonus
-            else
-                ability
-    in
-        SkillScores
-            (calcSkill dex Acrobatics)
-            (calcSkill wis AnimalHandling)
-            (calcSkill int Arcana)
-            (calcSkill str Athletics)
-            (calcSkill cha Deception)
-            (calcSkill int History)
-            (calcSkill wis Insight)
-            (calcSkill cha Intimidation)
-            (calcSkill int Investigation)
-            (calcSkill wis Medicine)
-            (calcSkill int Nature)
-            (calcSkill wis Perception)
-            (calcSkill cha Performance)
-            (calcSkill cha Persuasion)
-            (calcSkill int Religion)
-            (calcSkill dex SleightOfHand)
-            (calcSkill dex Stealth)
-            (calcSkill wis Survival)
-
-
-buildCharacter : InitialCharacterData -> CharacterData
-buildCharacter init_char_data =
-    let
-        level =
-            calcLevel init_char_data.experience_points
-        prof_bonus =
-            calcProfBonus level
-        ability_modifiers =
-            calcAbilityModifiers init_char_data.ability_scores
-        saving_throws =
-            calcSavingThrows ability_modifiers init_char_data.class prof_bonus
-        skills =
-            calcSkills ability_modifiers init_char_data.skill_profs prof_bonus
-    in
-        CharacterData
-            init_char_data.name
-            init_char_data.class
-            init_char_data.ability_scores
-            init_char_data.experience_points
-            level
-            prof_bonus
-            ability_modifiers
-            saving_throws
-            skills
+-- VIEW
+view : Types.Model -> Html Types.Msg
+view model =
+    div
+      []
+      [ characterCreationForm model
+      , characterSheet model.char_data
+      ]

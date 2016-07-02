@@ -1,0 +1,168 @@
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$View$characterCreationForm(model),
+				_user$project$View$characterSheet(model.char_data)
+			]));
+};
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var updateCharData = function (init_char_data) {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					init_char_data: init_char_data,
+					char_data: _user$project$CharacterGeneration$buildCharacter(init_char_data)
+				});
+		};
+		var init_char_data = model.init_char_data;
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'UpdateName':
+				var new_init_char_data = _elm_lang$core$Native_Utils.update(
+					init_char_data,
+					{name: _p0._0});
+				return {
+					ctor: '_Tuple2',
+					_0: updateCharData(new_init_char_data),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateClass':
+				var new_init_char_data = _elm_lang$core$Native_Utils.update(
+					init_char_data,
+					{$class: _p0._0});
+				return {
+					ctor: '_Tuple2',
+					_0: updateCharData(new_init_char_data),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateAbilityScores':
+				var _p2 = _p0._1;
+				var current_ability_score = init_char_data.ability_scores;
+				var new_init_char_data = function () {
+					var _p1 = _p0._0;
+					switch (_p1.ctor) {
+						case 'Strength':
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{str: _p2})
+								});
+						case 'Dexterity':
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{dex: _p2})
+								});
+						case 'Constitution':
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{con: _p2})
+								});
+						case 'Intelligence':
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{$int: _p2})
+								});
+						case 'Wisdom':
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{wis: _p2})
+								});
+						default:
+							return _elm_lang$core$Native_Utils.update(
+								init_char_data,
+								{
+									ability_scores: _elm_lang$core$Native_Utils.update(
+										current_ability_score,
+										{cha: _p2})
+								});
+					}
+				}();
+				return {
+					ctor: '_Tuple2',
+					_0: updateCharData(new_init_char_data),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'UpdateExperiencePoints':
+				var xp_int = A2(
+					_elm_lang$core$Result$withDefault,
+					-1,
+					_elm_lang$core$String$toInt(_p0._0));
+				var new_init_char_data = _elm_lang$core$Native_Utils.update(
+					init_char_data,
+					{experience_points: xp_int});
+				return {
+					ctor: '_Tuple2',
+					_0: updateCharData(new_init_char_data),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				var _p3 = _p0._0;
+				var current_skills = init_char_data.skill_profs;
+				if (_p0._1) {
+					var new_skills = A2(_elm_lang$core$List_ops['::'], _p3, current_skills);
+					var new_init_char_data = _elm_lang$core$Native_Utils.update(
+						init_char_data,
+						{skill_profs: new_skills});
+					return {
+						ctor: '_Tuple2',
+						_0: updateCharData(new_init_char_data),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					var new_skills = A2(
+						_elm_lang$core$List$filter,
+						function (s) {
+							return _elm_lang$core$Basics$not(
+								_elm_lang$core$Native_Utils.eq(s, _p3));
+						},
+						current_skills);
+					var new_init_char_data = _elm_lang$core$Native_Utils.update(
+						init_char_data,
+						{skill_profs: new_skills});
+					return {
+						ctor: '_Tuple2',
+						_0: updateCharData(new_init_char_data),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$Main$init = function () {
+	var init_char_data = A5(
+		_user$project$Types$InitialCharacterData,
+		'charname',
+		_user$project$CharacterClasses$bard,
+		A6(_user$project$Types$AbilityScores, 10, 16, 12, 11, 12, 14),
+		0,
+		_elm_lang$core$Native_List.fromArray(
+			[_user$project$Types$Acrobatics, _user$project$Types$Arcana]));
+	var char_data = _user$project$CharacterGeneration$buildCharacter(init_char_data);
+	var init_model = A2(_user$project$Types$Model, init_char_data, char_data);
+	return {ctor: '_Tuple2', _0: init_model, _1: _elm_lang$core$Platform_Cmd$none};
+}();
+var _user$project$Main$main = {
+	main: _elm_lang$html$Html_App$program(
+		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})
+};

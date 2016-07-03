@@ -1,135 +1,175 @@
+module Main exposing (..)
+
 import Html exposing (..)
 import Html.App as Html
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Types exposing ( InitialCharacterData
-                      , CharacterClass
-                      , AbilityScores
-                      , Skill )
+import Types
+    exposing
+        ( InitialCharacterData
+        , CharacterClass
+        , AbilityScores
+        , Skill
+        )
 import CharacterClasses exposing (..)
 import CharacterGeneration exposing (..)
 import View exposing (..)
 import String
 
-main = 
-    Html.program 
-      { init = init
-      , view = view
-      , update = update
-      , subscriptions = subscriptions
-      }
+
+main =
+    Html.program
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
 
 
-init : (Types.Model, Cmd Types.Msg)
+init : ( Types.Model, Cmd Types.Msg )
 init =
     let
-      init_char_data =
-        Types.InitialCharacterData
-          "charname"
-          bard
-          (AbilityScores 10 16 12 11 12 14)
-          0
-          [ Types.Acrobatics, Types.Arcana ]
+        init_char_data =
+            Types.InitialCharacterData "charname"
+                -- Initial value expected to be barbarian in classDropdown component
+                barbarian
+                (AbilityScores 10 10 10 10 10 10)
+                0
+                []
 
-      char_data =
-        buildCharacter init_char_data
+        char_data =
+            buildCharacter init_char_data
 
-      init_model =
-        Types.Model
-          init_char_data
-          char_data
+        init_model =
+            Types.Model init_char_data
+                char_data
     in
-      (init_model, Cmd.none)
+        ( init_model, Cmd.none )
 
 
-update : Types.Msg -> Types.Model -> (Types.Model, Cmd Types.Msg)
+update : Types.Msg -> Types.Model -> ( Types.Model, Cmd Types.Msg )
 update msg model =
     let
-      init_char_data = model.init_char_data
-      updateCharData init_char_data =
-        { model | 
-          init_char_data = init_char_data,
-          char_data = buildCharacter init_char_data
-        }
+        init_char_data =
+            model.init_char_data
+
+        updateCharData init_char_data =
+            { model
+                | init_char_data = init_char_data
+                , char_data = buildCharacter init_char_data
+            }
     in
-      case msg of
-          Types.UpdateName name ->
-            let
-              new_init_char_data =
-                { init_char_data | name = name }
-            in
-              (updateCharData new_init_char_data, Cmd.none)
-          
-          Types.UpdateClass class ->
-            let
-              new_init_char_data =
-                { init_char_data | class = class }
-            in
-              (updateCharData new_init_char_data, Cmd.none)
-          
-          Types.UpdateAbilityScores ability_score score ->
-            let
-              current_ability_score = init_char_data.ability_scores
-              new_init_char_data =
-                case ability_score of
-                  Types.Strength ->
-                    { init_char_data | ability_scores = { current_ability_score | str = score } }
-                  Types.Dexterity ->
-                    { init_char_data | ability_scores = { current_ability_score | dex = score } }
-                  Types.Constitution ->
-                    { init_char_data | ability_scores = { current_ability_score | con = score } }
-                  Types.Intelligence ->
-                    { init_char_data | ability_scores = { current_ability_score | int = score } }
-                  Types.Wisdom ->
-                    { init_char_data | ability_scores = { current_ability_score | wis = score } }
-                  Types.Charisma ->
-                    { init_char_data | ability_scores = { current_ability_score | cha = score } }
-            in
-              (updateCharData new_init_char_data, Cmd.none)
-          
-          Types.UpdateExperiencePoints xp ->
-            let
-              xp_int = Result.withDefault -1 (String.toInt xp)
-              new_init_char_data =
-                { init_char_data | experience_points = xp_int }
-            in
-              (updateCharData new_init_char_data, Cmd.none)
-          
-          Types.UpdateSkillProficiencies skill bool ->
-            let
-              current_skills = init_char_data.skill_profs
-            in
-              if bool then
-                -- add
+        case msg of
+            Types.UpdateName name ->
                 let
-                  new_skills = skill :: current_skills
-                  new_init_char_data =
-                    { init_char_data | skill_profs = new_skills }
+                    new_model =
+                        updateCharData { init_char_data | name = name }
                 in
-                  (updateCharData new_init_char_data, Cmd.none)
-              else
-                -- remove
+                    ( new_model, Cmd.none )
+
+            Types.UpdateClass class ->
                 let
-                  new_skills =
-                    List.filter
-                      (\s -> not (s == skill))
-                      current_skills
-                  new_init_char_data =
-                    { init_char_data | skill_profs = new_skills }
+                    new_model =
+                        updateCharData { init_char_data | class = class }
+
+                    -- TODO: When class gets updated
+                    -- remove skill proficiencies that
+                    -- are no longer valid
                 in
-                  (updateCharData new_init_char_data, Cmd.none)
+                    ( new_model, Cmd.none )
+
+            Types.UpdateAbilityScores ability_score score ->
+                let
+                    curr_ability_scores =
+                        init_char_data.ability_scores
+
+                    new_ability_scores =
+                        case ability_score of
+                            Types.Strength ->
+                                { curr_ability_scores | str = score }
+
+                            Types.Dexterity ->
+                                { curr_ability_scores | dex = score }
+
+                            Types.Constitution ->
+                                { curr_ability_scores | con = score }
+
+                            Types.Intelligence ->
+                                { curr_ability_scores | int = score }
+
+                            Types.Wisdom ->
+                                { curr_ability_scores | wis = score }
+
+                            Types.Charisma ->
+                                { curr_ability_scores | cha = score }
+
+                    new_model =
+                        updateCharData
+                            { init_char_data
+                                | ability_scores = new_ability_scores
+                            }
+                in
+                    ( new_model, Cmd.none )
+
+            Types.UpdateExperiencePoints xp ->
+                let
+                    new_model =
+                        updateCharData
+                            { init_char_data
+                                | experience_points = xp
+                            }
+                in
+                    ( new_model, Cmd.none )
+
+            Types.UpdateSkillProficiencies skill add ->
+                let
+                    current_skills =
+                        init_char_data.skill_profs
+
+                    new_skills =
+                        if add then
+                            skill :: current_skills
+                        else
+                            List.filter (\s -> not (s == skill))
+                                current_skills
+
+                    new_model =
+                        updateCharData
+                            { init_char_data
+                                | skill_profs = new_skills
+                            }
+                in
+                    ( new_model, Cmd.none )
+
+
 
 -- SUBSCRIPTIONS
+
+
 subscriptions : Types.Model -> Sub Types.Msg
 subscriptions model =
-  Sub.none
+    Sub.none
+
 
 
 -- VIEW
+
+
 view : Types.Model -> Html Types.Msg
 view model =
-    div
-      []
-      [ characterCreationForm model
-      , characterSheet model.char_data
-      ]
+    div []
+        [ h1 [ style [ ( "text-align", "center" ) ] ]
+            [ text "5ed DnD Character Generator" ]
+        , div
+            [ style
+                [ ( "display", "flex" )
+                , ( "justify-content", "center" )
+                , ( "align-items", "center" )
+                ]
+            ]
+            [ div [ style [ ( "width", "500px" ) ] ]
+                [ characterCreationForm model ]
+            , div [ style [ ( "width", "500px" ) ] ]
+                [ characterSheet model.char_data ]
+            ]
+        ]

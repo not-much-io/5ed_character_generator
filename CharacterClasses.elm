@@ -1,32 +1,10 @@
 module CharacterClasses exposing (..)
+
 import Types exposing (..)
 
 
-skills =
-    [ Acrobatics
-    , AnimalHandling
-    , Arcana
-    , Athletics
-    , Deception
-    , History
-    , Insight
-    , Intimidation
-    , Investigation
-    , Medicine
-    , Nature
-    , Perception
-    , Performance
-    , Persuasion
-    , Religion
-    , SleightOfHand
-    , Stealth
-    , Survival
-    ]
-
-
-barbarian = 
-    CharacterClass 
-        12
+barbarian =
+    CharacterClass 12
         [ Strength, Constitution ]
         2
         [ AnimalHandling
@@ -38,17 +16,34 @@ barbarian =
         ]
 
 
-bard = 
-    CharacterClass
-        8
+bard =
+    CharacterClass 8
         [ Dexterity, Charisma ]
         3
-        skills
+        -- All skills
+        [ Acrobatics
+        , AnimalHandling
+        , Arcana
+        , Athletics
+        , Deception
+        , History
+        , Insight
+        , Intimidation
+        , Investigation
+        , Medicine
+        , Nature
+        , Perception
+        , Performance
+        , Persuasion
+        , Religion
+        , SleightOfHand
+        , Stealth
+        , Survival
+        ]
 
 
 cleric =
-    CharacterClass
-        8
+    CharacterClass 8
         [ Wisdom, Charisma ]
         2
         [ History
@@ -60,8 +55,7 @@ cleric =
 
 
 druid =
-    CharacterClass 
-        8
+    CharacterClass 8
         [ Intelligence, Wisdom ]
         2
         [ Arcana
@@ -76,8 +70,7 @@ druid =
 
 
 fighter =
-    CharacterClass
-        10
+    CharacterClass 10
         [ Strength, Constitution ]
         2
         [ Acrobatics
@@ -92,8 +85,7 @@ fighter =
 
 
 monk =
-    CharacterClass
-        8
+    CharacterClass 8
         [ Strength, Dexterity ]
         2
         [ Acrobatics
@@ -106,8 +98,7 @@ monk =
 
 
 paladin =
-    CharacterClass
-        10
+    CharacterClass 10
         [ Wisdom, Charisma ]
         2
         [ Athletics
@@ -120,8 +111,7 @@ paladin =
 
 
 ranger =
-    CharacterClass 
-        10 
+    CharacterClass 10
         [ Strength, Dexterity ]
         3
         [ AnimalHandling
@@ -136,8 +126,7 @@ ranger =
 
 
 rogue =
-    CharacterClass
-        8
+    CharacterClass 8
         [ Dexterity, Intelligence ]
         4
         [ Acrobatics
@@ -155,8 +144,7 @@ rogue =
 
 
 sorcerer =
-    CharacterClass
-        6
+    CharacterClass 6
         [ Constitution, Charisma ]
         2
         [ Arcana
@@ -169,8 +157,7 @@ sorcerer =
 
 
 warlock =
-    CharacterClass 
-        8
+    CharacterClass 8
         [ Wisdom, Charisma ]
         2
         [ Arcana
@@ -184,8 +171,7 @@ warlock =
 
 
 wizard =
-    CharacterClass
-        6
+    CharacterClass 6
         [ Intelligence, Wisdom ]
         2
         [ Arcana
@@ -193,38 +179,5 @@ wizard =
         , Insight
         , Investigation
         , Medicine
-        , Religion 
+        , Religion
         ]
-
-
-character_classes = 
-    [ barbarian
-    , bard
-    , cleric
-    , druid
-    , fighter
-    , monk
-    , paladin
-    , ranger
-    , rogue
-    , sorcerer
-    , warlock
-    , wizard
-    ]
-
-
-character_classes_names =
-    [ "barbarian"
-    , "bard"
-    , "cleric"
-    , "druid"
-    , "fighter"
-    , "monk"
-    , "paladin"
-    , "ranger"
-    , "rogue"
-    , "sorcerer"
-    , "warlock"
-    , "wizard"
-    ]
-

@@ -1,5 +1,3 @@
-var _user$project$CharacterClasses$character_classes_names = _elm_lang$core$Native_List.fromArray(
-	['barbarian', 'bard', 'cleric', 'druid', 'fighter', 'monk', 'paladin', 'ranger', 'rogue', 'sorcerer', 'warlock', 'wizard']);
 var _user$project$CharacterClasses$wizard = A4(
 	_user$project$Types$CharacterClass,
 	6,
@@ -80,6 +78,14 @@ var _user$project$CharacterClasses$cleric = A4(
 	2,
 	_elm_lang$core$Native_List.fromArray(
 		[_user$project$Types$History, _user$project$Types$Insight, _user$project$Types$Medicine, _user$project$Types$Persuasion, _user$project$Types$Religion]));
+var _user$project$CharacterClasses$bard = A4(
+	_user$project$Types$CharacterClass,
+	8,
+	_elm_lang$core$Native_List.fromArray(
+		[_user$project$Types$Dexterity, _user$project$Types$Charisma]),
+	3,
+	_elm_lang$core$Native_List.fromArray(
+		[_user$project$Types$Acrobatics, _user$project$Types$AnimalHandling, _user$project$Types$Arcana, _user$project$Types$Athletics, _user$project$Types$Deception, _user$project$Types$History, _user$project$Types$Insight, _user$project$Types$Intimidation, _user$project$Types$Investigation, _user$project$Types$Medicine, _user$project$Types$Nature, _user$project$Types$Perception, _user$project$Types$Performance, _user$project$Types$Persuasion, _user$project$Types$Religion, _user$project$Types$SleightOfHand, _user$project$Types$Stealth, _user$project$Types$Survival]));
 var _user$project$CharacterClasses$barbarian = A4(
 	_user$project$Types$CharacterClass,
 	12,
@@ -88,14 +94,3 @@ var _user$project$CharacterClasses$barbarian = A4(
 	2,
 	_elm_lang$core$Native_List.fromArray(
 		[_user$project$Types$AnimalHandling, _user$project$Types$Athletics, _user$project$Types$Intimidation, _user$project$Types$Nature, _user$project$Types$Perception, _user$project$Types$Survival]));
-var _user$project$CharacterClasses$skills = _elm_lang$core$Native_List.fromArray(
-	[_user$project$Types$Acrobatics, _user$project$Types$AnimalHandling, _user$project$Types$Arcana, _user$project$Types$Athletics, _user$project$Types$Deception, _user$project$Types$History, _user$project$Types$Insight, _user$project$Types$Intimidation, _user$project$Types$Investigation, _user$project$Types$Medicine, _user$project$Types$Nature, _user$project$Types$Perception, _user$project$Types$Performance, _user$project$Types$Persuasion, _user$project$Types$Religion, _user$project$Types$SleightOfHand, _user$project$Types$Stealth, _user$project$Types$Survival]);
-var _user$project$CharacterClasses$bard = A4(
-	_user$project$Types$CharacterClass,
-	8,
-	_elm_lang$core$Native_List.fromArray(
-		[_user$project$Types$Dexterity, _user$project$Types$Charisma]),
-	3,
-	_user$project$CharacterClasses$skills);
-var _user$project$CharacterClasses$character_classes = _elm_lang$core$Native_List.fromArray(
-	[_user$project$CharacterClasses$barbarian, _user$project$CharacterClasses$bard, _user$project$CharacterClasses$cleric, _user$project$CharacterClasses$druid, _user$project$CharacterClasses$fighter, _user$project$CharacterClasses$monk, _user$project$CharacterClasses$paladin, _user$project$CharacterClasses$ranger, _user$project$CharacterClasses$rogue, _user$project$CharacterClasses$sorcerer, _user$project$CharacterClasses$warlock, _user$project$CharacterClasses$wizard]);

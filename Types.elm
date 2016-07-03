@@ -7,16 +7,16 @@ type alias Model =
     }
 
 
-type Msg 
-  = UpdateName String
-  | UpdateClass CharacterClass
-  | UpdateAbilityScores Ability Int
-  | UpdateExperiencePoints String
-  | UpdateSkillProficiencies Skill Bool
+type Msg
+    = UpdateName String
+    | UpdateClass CharacterClass
+    | UpdateAbilityScores Ability Int
+    | UpdateExperiencePoints Int
+    | UpdateSkillProficiencies Skill Bool
 
 
-type Ability = 
-    Strength
+type Ability
+    = Strength
     | Dexterity
     | Constitution
     | Intelligence
@@ -24,8 +24,8 @@ type Ability =
     | Charisma
 
 
-type Skill =
-    Acrobatics
+type Skill
+    = Acrobatics
     | AnimalHandling
     | Arcana
     | Athletics
@@ -77,7 +77,7 @@ type alias SavingThrows =
 
 type alias SkillScores =
     { acrobatics : Int
-    , animal_handling :Int
+    , animal_handling : Int
     , arcana : Int
     , athletics : Int
     , deception : Int
@@ -93,7 +93,7 @@ type alias SkillScores =
     , religion : Int
     , sleight_of_hand : Int
     , stealth : Int
-    , survivial : Int
+    , survival : Int
     }
 
 
@@ -110,7 +110,7 @@ type alias CharacterData =
     { name : String
     , class : CharacterClass
     , ability_scores : AbilityScores
-    , experience_points : Int     
+    , experience_points : Int
     , level : Int
     , proficiency_bonus : Int
     , ability_modifiers : AbilityModifiers
@@ -122,6 +122,6 @@ type alias CharacterData =
 type alias CharacterClass =
     { hit_die : Int
     , saving_throws : List Ability
-    , skill_profs : Int  
+    , skill_profs : Int
     , skill_choices : List Skill
     }

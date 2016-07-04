@@ -120,7 +120,8 @@ type alias CharacterData =
 
 
 type alias CharacterClass =
-    { hit_die : Int
+    { as_string : String
+    , hit_die : Int
     , saving_throws : List Ability
     , skill_profs : Int
     , skill_choices : List Skill

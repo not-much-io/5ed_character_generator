@@ -29,74 +29,19 @@ nameInput currName =
 classDropdown : CharacterClass -> Html Types.Msg
 classDropdown currClass =
     let
-        character_classes_names =
-            [ "barbarian"
-            , "bard"
-            , "cleric"
-            , "druid"
-            , "fighter"
-            , "monk"
-            , "paladin"
-            , "ranger"
-            , "rogue"
-            , "sorcerer"
-            , "warlock"
-            , "wizard"
-            ]
-
-        nameToClass : String -> Types.CharacterClass
-        nameToClass name =
-            case name of
-                "barbarian" ->
-                    barbarian
-
-                "bard" ->
-                    bard
-
-                "cleric" ->
-                    cleric
-
-                "druid" ->
-                    druid
-
-                "fighter" ->
-                    fighter
-
-                "monk" ->
-                    monk
-
-                "paladin" ->
-                    paladin
-
-                "ranger" ->
-                    ranger
-
-                "rogue" ->
-                    rogue
-
-                "sorcerer" ->
-                    sorcerer
-
-                "warlock" ->
-                    warlock
-
-                "wizard" ->
-                    wizard
-
-                _ ->
-                    -- Cannot happen!
-                    -- BUT if it does, set to current
-                    currClass
-
         options =
             List.map
                 (\cls ->
-                    option [ value cls ]
-                        [ text cls ]
+                    option [ value cls.as_string ]
+                        [ text cls.as_string ]
                 )
-                character_classes_names
+                character_classes
+
+        updateClass : String -> Types.Msg
+        updateClass str =
+            UpdateClass (strToCharacterClass str currClass)
     in
-        select [ onInput (\cls_str -> UpdateClass (nameToClass cls_str)) ]
+        select [ onInput updateClass ]
             options
 
 

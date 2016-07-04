@@ -4,7 +4,8 @@ import Types exposing (..)
 
 
 barbarian =
-    CharacterClass 12
+    CharacterClass "barbarian"
+        12
         [ Strength, Constitution ]
         2
         [ AnimalHandling
@@ -17,7 +18,8 @@ barbarian =
 
 
 bard =
-    CharacterClass 8
+    CharacterClass "bard"
+        8
         [ Dexterity, Charisma ]
         3
         -- All skills
@@ -43,7 +45,8 @@ bard =
 
 
 cleric =
-    CharacterClass 8
+    CharacterClass "cleric"
+        8
         [ Wisdom, Charisma ]
         2
         [ History
@@ -55,7 +58,8 @@ cleric =
 
 
 druid =
-    CharacterClass 8
+    CharacterClass "druid"
+        8
         [ Intelligence, Wisdom ]
         2
         [ Arcana
@@ -70,7 +74,8 @@ druid =
 
 
 fighter =
-    CharacterClass 10
+    CharacterClass "fighter"
+        10
         [ Strength, Constitution ]
         2
         [ Acrobatics
@@ -85,7 +90,8 @@ fighter =
 
 
 monk =
-    CharacterClass 8
+    CharacterClass "monk"
+        8
         [ Strength, Dexterity ]
         2
         [ Acrobatics
@@ -98,7 +104,8 @@ monk =
 
 
 paladin =
-    CharacterClass 10
+    CharacterClass "paladin"
+        10
         [ Wisdom, Charisma ]
         2
         [ Athletics
@@ -111,7 +118,8 @@ paladin =
 
 
 ranger =
-    CharacterClass 10
+    CharacterClass "ranger"
+        10
         [ Strength, Dexterity ]
         3
         [ AnimalHandling
@@ -126,7 +134,8 @@ ranger =
 
 
 rogue =
-    CharacterClass 8
+    CharacterClass "rogue"
+        8
         [ Dexterity, Intelligence ]
         4
         [ Acrobatics
@@ -144,7 +153,8 @@ rogue =
 
 
 sorcerer =
-    CharacterClass 6
+    CharacterClass "sorcerer"
+        6
         [ Constitution, Charisma ]
         2
         [ Arcana
@@ -157,7 +167,8 @@ sorcerer =
 
 
 warlock =
-    CharacterClass 8
+    CharacterClass "warlock"
+        8
         [ Wisdom, Charisma ]
         2
         [ Arcana
@@ -171,7 +182,8 @@ warlock =
 
 
 wizard =
-    CharacterClass 6
+    CharacterClass "wizard"
+        6
         [ Intelligence, Wisdom ]
         2
         [ Arcana
@@ -181,3 +193,67 @@ wizard =
         , Medicine
         , Religion
         ]
+
+
+character_classes =
+    [ barbarian
+    , bard
+    , cleric
+    , druid
+    , fighter
+    , monk
+    , paladin
+    , ranger
+    , rogue
+    , sorcerer
+    , warlock
+    , wizard
+    ]
+
+
+strToCharacterClass : String -> CharacterClass -> CharacterClass
+strToCharacterClass name currClass =
+    case name of
+        "barbarian" ->
+            barbarian
+
+        "bard" ->
+            bard
+
+        "cleric" ->
+            cleric
+
+        "druid" ->
+            druid
+
+        "fighter" ->
+            fighter
+
+        "monk" ->
+            monk
+
+        "paladin" ->
+            paladin
+
+        "ranger" ->
+            ranger
+
+        "rogue" ->
+            rogue
+
+        "sorcerer" ->
+            sorcerer
+
+        "warlock" ->
+            warlock
+
+        "wizard" ->
+            wizard
+
+        _ ->
+            -- Cannot happen!
+            --      - Every programmer ever
+            --
+            -- BUT if it does, set back to current
+            -- TODO: Don't fail silently! Let the whole world know!
+            currClass

@@ -65,14 +65,14 @@ calcProfBonus level =
         initial_proficiency + (List.sum prof_gaining_info)
 
 
-calcAbilityModifiers : AbilityScores -> AbilityModifiers
+calcAbilityModifiers : AbilityScores -> AbilityScores
 calcAbilityModifiers { str, dex, con, int, wis, cha } =
     let
-        calcMod : Int -> Int
-        calcMod score =
-            (score - 10) // 2
+        calcMod : ( Ability, Int ) -> ( Ability, Int )
+        calcMod ( ability, score ) =
+            ( ability, (score - 10) // 2 )
     in
-        AbilityModifiers (calcMod str)
+        AbilityScores (calcMod str)
             (calcMod dex)
             (calcMod con)
             (calcMod int)
@@ -80,33 +80,33 @@ calcAbilityModifiers { str, dex, con, int, wis, cha } =
             (calcMod cha)
 
 
-calcSavingThrows : AbilityModifiers -> CharacterClass -> Int -> SavingThrows
+calcSavingThrows : AbilityScores -> CharacterClass -> Int -> AbilityScores
 calcSavingThrows { str, dex, con, int, wis, cha } { saving_throws } prof_bonus =
     let
-        calcSavingThrow : Int -> Ability -> Int
-        calcSavingThrow ability_score ability =
+        calcSavingThrow : ( Ability, Int ) -> ( Ability, Int )
+        calcSavingThrow ( ability, ability_score ) =
             if (List.member ability saving_throws) then
-                ability_score + prof_bonus
+                ( ability, (ability_score + prof_bonus) )
             else
-                ability_score
+                ( ability, ability_score )
     in
-        SavingThrows (calcSavingThrow str Strength)
-            (calcSavingThrow dex Dexterity)
-            (calcSavingThrow con Constitution)
-            (calcSavingThrow int Intelligence)
-            (calcSavingThrow wis Wisdom)
-            (calcSavingThrow cha Charisma)
+        AbilityScores (calcSavingThrow str)
+            (calcSavingThrow dex)
+            (calcSavingThrow con)
+            (calcSavingThrow int)
+            (calcSavingThrow wis)
+            (calcSavingThrow cha)
 
 
-calcSkills : AbilityModifiers -> List Skill -> Int -> SkillScores
+calcSkills : AbilityScoreValues -> List Skill -> Int -> SkillScores
 calcSkills { str, dex, con, int, wis, cha } skill_profs prof_bonus =
     let
-        calcSkill : Int -> Skill -> Int
-        calcSkill ability skill =
+        calcSkill : Int -> Skill -> ( Skill, Int )
+        calcSkill ability_score skill =
             if (List.member skill skill_profs) then
-                ability + prof_bonus
+                ( skill, (ability_score + prof_bonus) )
             else
-                ability
+                ( skill, ability_score )
     in
         SkillScores (calcSkill dex Acrobatics)
             (calcSkill wis AnimalHandling)
@@ -144,7 +144,7 @@ buildCharacter { name, experience_points, ability_scores, class, skill_profs } =
             calcSavingThrows ability_modifiers class prof_bonus
 
         skills =
-            calcSkills ability_modifiers skill_profs prof_bonus
+            calcSkills (getAbilityScoreValues ability_modifiers) skill_profs prof_bonus
     in
         CharacterData name
             class

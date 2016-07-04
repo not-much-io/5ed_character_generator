@@ -10,7 +10,7 @@ type alias Model =
 type Msg
     = UpdateName String
     | UpdateClass CharacterClass
-    | UpdateAbilityScores Ability Int
+    | UpdateAbilityScores ( Ability, Int )
     | UpdateExperiencePoints Int
     | UpdateSkillProficiencies Skill Bool
 
@@ -46,6 +46,16 @@ type Skill
 
 
 type alias AbilityScores =
+    { str : ( Ability, Int )
+    , dex : ( Ability, Int )
+    , con : ( Ability, Int )
+    , int : ( Ability, Int )
+    , wis : ( Ability, Int )
+    , cha : ( Ability, Int )
+    }
+
+
+type alias AbilityScoreValues =
     { str : Int
     , dex : Int
     , con : Int
@@ -55,45 +65,83 @@ type alias AbilityScores =
     }
 
 
-type alias AbilityModifiers =
-    { str : Int
-    , dex : Int
-    , con : Int
-    , int : Int
-    , wis : Int
-    , cha : Int
-    }
+getAbilityScoreValues : AbilityScores -> AbilityScoreValues
+getAbilityScoreValues { str, dex, con, int, wis, cha } =
+    let
+        ( _, str_score ) =
+            str
+
+        ( _, dex_score ) =
+            dex
+
+        ( _, con_score ) =
+            con
+
+        ( _, int_score ) =
+            int
+
+        ( _, wis_score ) =
+            wis
+
+        ( _, cha_score ) =
+            cha
+    in
+        AbilityScoreValues str_score
+            dex_score
+            con_score
+            int_score
+            wis_score
+            cha_score
 
 
-type alias SavingThrows =
-    { str : Int
-    , dex : Int
-    , con : Int
-    , int : Int
-    , wis : Int
-    , cha : Int
-    }
+mapToAbilities : (( Ability, Int ) -> a) -> AbilityScores -> List a
+mapToAbilities f ability_scores =
+    [ (f ability_scores.str)
+    , (f ability_scores.dex)
+    , (f ability_scores.con)
+    , (f ability_scores.int)
+    , (f ability_scores.wis)
+    , (f ability_scores.cha)
+    ]
 
 
 type alias SkillScores =
-    { acrobatics : Int
-    , animal_handling : Int
-    , arcana : Int
-    , athletics : Int
-    , deception : Int
-    , history : Int
-    , insight : Int
-    , intimidation : Int
-    , investigation : Int
-    , medicine : Int
-    , nature : Int
-    , perception : Int
-    , performance : Int
-    , persuasion : Int
-    , religion : Int
-    , sleight_of_hand : Int
-    , stealth : Int
-    , survival : Int
+    { acrobatics :
+        ( Skill, Int )
+    , animal_handling :
+        ( Skill, Int )
+    , arcana :
+        ( Skill, Int )
+    , athletics :
+        ( Skill, Int )
+    , deception :
+        ( Skill, Int )
+    , history :
+        ( Skill, Int )
+    , insight :
+        ( Skill, Int )
+    , intimidation :
+        ( Skill, Int )
+    , investigation :
+        ( Skill, Int )
+    , medicine :
+        ( Skill, Int )
+    , nature :
+        ( Skill, Int )
+    , perception :
+        ( Skill, Int )
+    , performance :
+        ( Skill, Int )
+    , persuasion :
+        ( Skill, Int )
+    , religion :
+        ( Skill, Int )
+    , sleight_of_hand :
+        ( Skill, Int )
+    , stealth :
+        ( Skill, Int )
+    , survival :
+        ( Skill, Int )
     }
 
 
@@ -113,8 +161,8 @@ type alias CharacterData =
     , experience_points : Int
     , level : Int
     , proficiency_bonus : Int
-    , ability_modifiers : AbilityModifiers
-    , saving_throws : SavingThrows
+    , ability_modifiers : AbilityScores
+    , saving_throws : AbilityScores
     , skills : SkillScores
     }
 

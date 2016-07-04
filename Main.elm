@@ -31,9 +31,15 @@ init =
     let
         init_char_data =
             Types.InitialCharacterData "charname"
-                -- Initial value expected to be barbarian in classDropdown component
+                -- TODO: Initial value expected to be barbarian in classDropdown component
                 barbarian
-                (AbilityScores 10 10 10 10 10 10)
+                (AbilityScores ( Types.Strength, 10 )
+                    ( Types.Dexterity, 10 )
+                    ( Types.Constitution, 10 )
+                    ( Types.Intelligence, 10 )
+                    ( Types.Wisdom, 10 )
+                    ( Types.Charisma, 10 )
+                )
                 0
                 []
 
@@ -78,30 +84,30 @@ update msg model =
                 in
                     ( new_model, Cmd.none )
 
-            Types.UpdateAbilityScores ability_score score ->
+            Types.UpdateAbilityScores ( ability, score ) ->
                 let
                     curr_ability_scores =
                         init_char_data.ability_scores
 
                     new_ability_scores =
-                        case ability_score of
+                        case ability of
                             Types.Strength ->
-                                { curr_ability_scores | str = score }
+                                { curr_ability_scores | str = ( Types.Strength, score ) }
 
                             Types.Dexterity ->
-                                { curr_ability_scores | dex = score }
+                                { curr_ability_scores | dex = ( Types.Dexterity, score ) }
 
                             Types.Constitution ->
-                                { curr_ability_scores | con = score }
+                                { curr_ability_scores | con = ( Types.Constitution, score ) }
 
                             Types.Intelligence ->
-                                { curr_ability_scores | int = score }
+                                { curr_ability_scores | int = ( Types.Intelligence, score ) }
 
                             Types.Wisdom ->
-                                { curr_ability_scores | wis = score }
+                                { curr_ability_scores | wis = ( Types.Wisdom, score ) }
 
                             Types.Charisma ->
-                                { curr_ability_scores | cha = score }
+                                { curr_ability_scores | cha = ( Types.Charisma, score ) }
 
                     new_model =
                         updateCharData

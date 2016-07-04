@@ -46,48 +46,14 @@ classDropdown currClass =
 
 
 abilityScoreInput : AbilityScores -> Html Types.Msg
-abilityScoreInput currAbilityScores =
+abilityScoreInput ability_scores =
     let
-        abilities =
-            [ Strength
-            , Dexterity
-            , Constitution
-            , Intelligence
-            , Wisdom
-            , Charisma
-            ]
+        scoreToInt : Ability -> String -> Int -> Int
+        scoreToInt ability score_str curr_score =
+            Result.withDefault curr_score (String.toInt score_str)
 
-        getAbility : Ability -> Int
-        getAbility ability =
-            case ability of
-                Types.Strength ->
-                    currAbilityScores.str
-
-                Types.Dexterity ->
-                    currAbilityScores.dex
-
-                Types.Constitution ->
-                    currAbilityScores.con
-
-                Types.Intelligence ->
-                    currAbilityScores.int
-
-                Types.Wisdom ->
-                    currAbilityScores.wis
-
-                Types.Charisma ->
-                    currAbilityScores.cha
-
-        scoreToInt : Ability -> String -> Int
-        scoreToInt ability score_str =
-            let
-                default =
-                    getAbility ability
-            in
-                Result.withDefault default (String.toInt score_str)
-
-        abilityRangeScroller : Types.Ability -> Html Msg
-        abilityRangeScroller ability =
+        abilityRangeScroller : ( Types.Ability, Int ) -> Html Msg
+        abilityRangeScroller ( ability, score ) =
             let
                 ability_str =
                     toString ability
@@ -99,18 +65,17 @@ abilityScoreInput currAbilityScores =
                         [ type' "number"
                         , Html.Attributes.min "8"
                         , Html.Attributes.max "16"
-                        , value (toString (getAbility ability))
+                        , value (toString score)
                         , onInput
-                            (\score ->
-                                UpdateAbilityScores ability
-                                    (scoreToInt ability score)
+                            (\score_str ->
+                                UpdateAbilityScores ( ability, (scoreToInt ability score_str score) )
                             )
                         ]
                         []
                     ]
     in
         div []
-            (List.map abilityRangeScroller abilities)
+            (Types.mapToAbilities abilityRangeScroller ability_scores)
 
 
 experiencePointsInput : Int -> Html Types.Msg
@@ -261,7 +226,7 @@ classBlock cls =
             ]
 
 
-abilitiesBlock : AbilityScores -> AbilityModifiers -> Html Msg
+abilitiesBlock : AbilityScores -> AbilityScores -> Html Msg
 abilitiesBlock ability_scores ability_modifiers =
     div []
         [ h4 [] [ text "Ability Scores" ]
@@ -315,7 +280,7 @@ abilitiesBlock ability_scores ability_modifiers =
         ]
 
 
-savingThrowsBlock : SavingThrows -> Html Msg
+savingThrowsBlock : AbilityScores -> Html Msg
 savingThrowsBlock saving_throws =
     div []
         [ h4 [] [ text "Saving Throws" ]
